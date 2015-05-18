@@ -68,6 +68,9 @@ public class Game {
     }
 
     public void move(Tank tank, int x, int y) {
+        if (getWinner() >= 0) {
+            return;
+        }
         if (tank.getPlayer() == currentPlayer &&
                 x >= 0 && x < 8 &&
                 y >= 0 && y < 6 &&
@@ -83,6 +86,9 @@ public class Game {
     }
 
     public void attack(Tank attacker, Tank defender) {
+        if (getWinner() >= 0) {
+            return;
+        }
         if (attacker.getPlayer() == currentPlayer &&
                 defender.getPlayer() != currentPlayer) {
             int turnPointsNeeded = 2 * (Math.abs(attacker.getX() - defender.getX()) + Math.abs(attacker.getY() - defender.getY()));
