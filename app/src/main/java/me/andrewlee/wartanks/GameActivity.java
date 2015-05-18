@@ -8,13 +8,34 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Random;
+
 
 public class GameActivity extends ActionBarActivity {
+
+    private Random die;
+
+    // Game variables
+    private int currentPlayerIndex;
+    private int movePointsRemaining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        die = new Random();
+
+        restartGame();
+    }
+
+    private void restartGame() {
+        newTurn(0);
+    }
+
+    private void newTurn(int newPlayerIndex) {
+        currentPlayerIndex = newPlayerIndex;
+        movePointsRemaining = die.nextInt(6);
+        Log.d("asdf", "number is " + movePointsRemaining);
     }
 
 
@@ -41,7 +62,7 @@ public class GameActivity extends ActionBarActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Log.d("click", "restart!");
+                            restartGame();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
