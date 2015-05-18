@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -14,6 +15,8 @@ import java.util.Random;
 public class GameActivity extends ActionBarActivity {
 
     private Random die;
+    private TextView player0TurnPoints;
+    private TextView player1TurnPoints;
 
     // Game variables
     private int currentPlayerIndex;
@@ -25,6 +28,9 @@ public class GameActivity extends ActionBarActivity {
         setContentView(R.layout.activity_game);
         die = new Random();
 
+        player0TurnPoints = (TextView)findViewById(R.id.Player0TurnPoints);
+        player1TurnPoints = (TextView)findViewById(R.id.Player1TurnPoints);
+
         restartGame();
     }
 
@@ -34,10 +40,13 @@ public class GameActivity extends ActionBarActivity {
 
     private void newTurn(int newPlayerIndex) {
         currentPlayerIndex = newPlayerIndex;
-        movePointsRemaining = die.nextInt(6);
-        Log.d("asdf", "number is " + movePointsRemaining);
+        setTurnPoints(currentPlayerIndex, die.nextInt(6) + 1);
     }
 
+    private void setTurnPoints(int playerIndex, int turnPoints) {
+        movePointsRemaining = turnPoints;
+        (playerIndex == 0 ? player0TurnPoints : player1TurnPoints).setText("" + turnPoints);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
