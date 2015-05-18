@@ -38,9 +38,32 @@ public class Game {
     }
 
     private void maybeAdvancePlayer() {
-        if (turnPointsLeft == 0) {
+        if (getWinner() < 0 && turnPointsLeft == 0) {
             currentPlayer = (currentPlayer + 1) % 2;
             newTurn();
+        }
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public int getWinner() {
+        int player0Size = 0;
+        int player1Size = 0;
+        for (Tank tank : tanks) {
+            if (tank.getPlayer() == 0) {
+                player0Size++;
+            } else {
+                player1Size++;
+            }
+        }
+        if (player0Size > 0 && player1Size == 0) {
+            return 0;
+        } else if (player0Size == 0 && player1Size > 0) {
+            return 1;
+        } else{
+            return -1;
         }
     }
 
@@ -48,14 +71,31 @@ public class Game {
         if (tank.getPlayer() == currentPlayer &&
                 x >= 0 && x < 8 &&
                 y >= 0 && y < 6 &&
-                (Math.abs(tank.getX() - x) == 1 || Math.abs(tank.getY() - y) == 1 ) &&
+                (Math.abs(tank.getX() - x) + Math.abs(tank.getY() - y) == 1) &&
                 getTankAtPosition(x, y) == null) {
             tank.setX(x);
             tank.setY(y);
             turnPointsLeft--;
-            maybeAdvancePlayer();
 
+            maybeAdvancePlayer();
             listener.refresh();
+        }
+    }
+
+    public void attack(Tank attacker, Tank defender) {
+        if (attacker.getPlayer() == currentPlayer &&
+                defender.getPlayer() != currentPlayer) {
+            int turnPointsNeeded = 2 * (Math.abs(attacker.getX() - defender.getX()) + Math.abs(attacker.getY() - defender.getY()));
+            if (turnPointsLeft >= turnPointsNeeded) {
+                defender.setHealth(defender.getHealth() - 1);
+                if (defender.getHealth() <= 0) {
+                    tanks.remove(defender);
+                }
+                turnPointsLeft -= turnPointsNeeded;
+
+                maybeAdvancePlayer();
+                listener.refresh();
+            }
         }
     }
 

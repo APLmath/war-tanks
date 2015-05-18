@@ -2,6 +2,7 @@ package me.andrewlee.wartanks;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ public class GameActivity extends ActionBarActivity implements GameListener {
 
     // Game variables
     private Game game;
+    private int lastPlayerTurn;
+    private Tank selectedTank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +68,16 @@ public class GameActivity extends ActionBarActivity implements GameListener {
 
     private void restartGame() {
         game = new Game(this);
+        lastPlayerTurn = game.getCurrentPlayer();
         refresh();
     }
 
     public void refresh() {
+        if (lastPlayerTurn != game.getCurrentPlayer()) {
+            lastPlayerTurn = game.getCurrentPlayer();
+            selectedTank = null;
+        }
+
         for (int y = 0; y < 6; y++) {
             for (int x = 0; x < 8; x++) {
                 Button boardButton = boardButtons[y][x];
@@ -80,11 +89,18 @@ public class GameActivity extends ActionBarActivity implements GameListener {
                     boardButton.setBackgroundResource(R.color.board);
                     boardButton.setText("");
                 }
+
+                boardButton.setTextColor(tank == selectedTank ? Color.YELLOW : Color.BLACK);
             }
         }
 
-        setTurnPoints(0, game.getTurnPointsLeftForPlayer(0));
-        setTurnPoints(1, game.getTurnPointsLeftForPlayer(1));
+        int winner = game.getWinner();
+        if (winner < 0) {
+            setTurnPoints(0, game.getTurnPointsLeftForPlayer(0));
+            setTurnPoints(1, game.getTurnPointsLeftForPlayer(1));
+        } else {
+            (winner == 0 ? player0TurnPoints : player1TurnPoints).setText("Winner");
+        }
     }
 
     private void setTurnPoints(int playerIndex, int turnPoints) {
@@ -93,6 +109,25 @@ public class GameActivity extends ActionBarActivity implements GameListener {
 
     private void boardButtonClicked(int x, int y) {
         Log.d("Board", "clicked: (" + x + "." +  y + ")");
+
+        Tank tank = game.getTankAtPosition(x, y);
+        if (selectedTank == null) {
+            if (tank != null && tank.getPlayer() == game.getCurrentPlayer()) {
+                selectedTank = tank;
+            }
+        } else {
+            if (tank == null) {
+                game.move(selectedTank, x, y);
+            } else if (tank == selectedTank) {
+                selectedTank = null;
+            } else if (tank.getPlayer() == game.getCurrentPlayer()) {
+                selectedTank = tank;
+            } else {
+                game.attack(selectedTank, tank);
+            }
+        }
+
+        refresh();
     }
 
     @Override
