@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -15,6 +20,7 @@ import java.util.Random;
 public class GameActivity extends ActionBarActivity implements GameListener {
     private TextView player0TurnPoints;
     private TextView player1TurnPoints;
+    private Button[][] boardButtons;
 
     // Game variables
     private Game game;
@@ -26,6 +32,27 @@ public class GameActivity extends ActionBarActivity implements GameListener {
 
         player0TurnPoints = (TextView)findViewById(R.id.Player0TurnPoints);
         player1TurnPoints = (TextView)findViewById(R.id.Player1TurnPoints);
+        boardButtons = new Button[6][8];
+
+        TableLayout boardLayout = (TableLayout)findViewById(R.id.BoardLayout);
+        for (int y = 0; y < 6; y++) {
+            TableRow row = new TableRow(this);
+            for (int x = 0; x < 8; x++) {
+                Button boardButton = new Button(this);
+                final int posX = x;
+                final int posY = y;
+                boardButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("board", "position: " + posX + "," + posY);
+                    }
+                });
+                boardButtons[y][x] = boardButton;
+                //boardGridLayout.addView(boardButton, new GridLayout.LayoutParams(GridLayout.spec(y), GridLayout.spec(x)));
+                row.addView(boardButton);
+            }
+            boardLayout.addView(row);
+        }
 
         restartGame();
     }
