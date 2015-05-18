@@ -21,6 +21,7 @@ import java.util.Random;
 public class GameActivity extends ActionBarActivity implements GameListener {
     private TextView player0TurnPoints;
     private TextView player1TurnPoints;
+    private TextView winnerTextView;
     private Button[][] boardButtons;
 
     // Game variables
@@ -35,6 +36,7 @@ public class GameActivity extends ActionBarActivity implements GameListener {
 
         player0TurnPoints = (TextView)findViewById(R.id.Player0TurnPoints);
         player1TurnPoints = (TextView)findViewById(R.id.Player1TurnPoints);
+        winnerTextView = (TextView)findViewById(R.id.WinnerText);
         boardButtons = new Button[6][8];
 
         TableLayout boardLayout = (TableLayout)findViewById(R.id.BoardLayout);
@@ -94,12 +96,16 @@ public class GameActivity extends ActionBarActivity implements GameListener {
             }
         }
 
+        setTurnPoints(0, game.getTurnPointsLeftForPlayer(0));
+        setTurnPoints(1, game.getTurnPointsLeftForPlayer(1));
+
         int winner = game.getWinner();
         if (winner < 0) {
-            setTurnPoints(0, game.getTurnPointsLeftForPlayer(0));
-            setTurnPoints(1, game.getTurnPointsLeftForPlayer(1));
+            winnerTextView.setVisibility(View.GONE);
         } else {
-            (winner == 0 ? player0TurnPoints : player1TurnPoints).setText("Winner");
+            winnerTextView.setVisibility(View.VISIBLE);
+            int color = getResources().getColor(winner == 0 ? R.color.player0 : R.color.player1);
+            winnerTextView.setTextColor(color);
         }
     }
 
@@ -167,5 +173,10 @@ public class GameActivity extends ActionBarActivity implements GameListener {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        ;
     }
 }
