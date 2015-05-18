@@ -48,7 +48,8 @@ public class Game {
         if (tank.getPlayer() == currentPlayer &&
                 x >= 0 && x < 8 &&
                 y >= 0 && y < 6 &&
-                (Math.abs(tank.getX() - x) == 1 || Math.abs(tank.getY() - y) == 1)) {
+                (Math.abs(tank.getX() - x) == 1 || Math.abs(tank.getY() - y) == 1 ) &&
+                getTankAtPosition(x, y) == null) {
             tank.setX(x);
             tank.setY(y);
             turnPointsLeft--;
@@ -60,5 +61,14 @@ public class Game {
 
     public int getTurnPointsLeftForPlayer(int player) {
         return player == currentPlayer ? turnPointsLeft : 0;
+    }
+
+    public Tank getTankAtPosition(int x, int y) {
+        for (Tank tank : tanks) {
+            if (tank.getX() == x && tank.getY() == y) {
+                return tank;
+            }
+        }
+        return null;
     }
 }

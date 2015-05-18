@@ -71,8 +71,15 @@ public class GameActivity extends ActionBarActivity implements GameListener {
     public void refresh() {
         for (int y = 0; y < 6; y++) {
             for (int x = 0; x < 8; x++) {
-                //boardButtons[y][x].setBackgroundColor(getResources().getColor(R.color.board));
-                boardButtons[y][x].setBackgroundResource(R.color.board);
+                Button boardButton = boardButtons[y][x];
+                Tank tank = game.getTankAtPosition(x, y);
+                if (tank != null) {
+                    boardButton.setBackgroundResource(tank.getPlayer() == 0 ? R.color.player0 : R.color.player1);
+                    boardButton.setText("" + tank.getHealth());
+                } else {
+                    boardButton.setBackgroundResource(R.color.board);
+                    boardButton.setText("");
+                }
             }
         }
 
