@@ -47,6 +47,13 @@ public class GameActivity extends ActionBarActivity implements GameListener {
                         boardButtonClicked(posX, posY);
                     }
                 });
+                TableRow.LayoutParams params = new TableRow.LayoutParams();
+                int margin = 4;
+                params.bottomMargin = margin;
+                params.topMargin = margin;
+                params.leftMargin = margin;
+                params.rightMargin = margin;
+                boardButton.setLayoutParams(params);
                 boardButtons[y][x] = boardButton;
                 row.addView(boardButton);
             }
@@ -62,6 +69,13 @@ public class GameActivity extends ActionBarActivity implements GameListener {
     }
 
     public void refresh() {
+        for (int y = 0; y < 6; y++) {
+            for (int x = 0; x < 8; x++) {
+                //boardButtons[y][x].setBackgroundColor(getResources().getColor(R.color.board));
+                boardButtons[y][x].setBackgroundResource(R.color.board);
+            }
+        }
+
         setTurnPoints(0, game.getTurnPointsLeftForPlayer(0));
         setTurnPoints(1, game.getTurnPointsLeftForPlayer(1));
     }
