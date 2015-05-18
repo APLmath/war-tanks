@@ -44,11 +44,10 @@ public class GameActivity extends ActionBarActivity implements GameListener {
                 boardButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("board", "position: " + posX + "," + posY);
+                        boardButtonClicked(posX, posY);
                     }
                 });
                 boardButtons[y][x] = boardButton;
-                //boardGridLayout.addView(boardButton, new GridLayout.LayoutParams(GridLayout.spec(y), GridLayout.spec(x)));
                 row.addView(boardButton);
             }
             boardLayout.addView(row);
@@ -69,6 +68,10 @@ public class GameActivity extends ActionBarActivity implements GameListener {
 
     private void setTurnPoints(int playerIndex, int turnPoints) {
         (playerIndex == 0 ? player0TurnPoints : player1TurnPoints).setText("" + turnPoints);
+    }
+
+    private void boardButtonClicked(int x, int y) {
+        Log.d("Board", "clicked: (" + x + "." +  y + ")");
     }
 
     @Override
