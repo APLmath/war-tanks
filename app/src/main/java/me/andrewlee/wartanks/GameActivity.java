@@ -12,21 +12,17 @@ import android.widget.TextView;
 import java.util.Random;
 
 
-public class GameActivity extends ActionBarActivity {
-
-    private Random die;
+public class GameActivity extends ActionBarActivity implements GameListener {
     private TextView player0TurnPoints;
     private TextView player1TurnPoints;
 
     // Game variables
-    private int currentPlayerIndex;
-    private int movePointsRemaining;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        die = new Random();
 
         player0TurnPoints = (TextView)findViewById(R.id.Player0TurnPoints);
         player1TurnPoints = (TextView)findViewById(R.id.Player1TurnPoints);
@@ -35,16 +31,16 @@ public class GameActivity extends ActionBarActivity {
     }
 
     private void restartGame() {
-        newTurn(0);
+        game = new Game(this);
+        refresh();
     }
 
-    private void newTurn(int newPlayerIndex) {
-        currentPlayerIndex = newPlayerIndex;
-        setTurnPoints(currentPlayerIndex, die.nextInt(6) + 1);
+    public void refresh() {
+        setTurnPoints(0, game.getTurnPointsLeftForPlayer(0));
+        setTurnPoints(1, game.getTurnPointsLeftForPlayer(1));
     }
 
     private void setTurnPoints(int playerIndex, int turnPoints) {
-        movePointsRemaining = turnPoints;
         (playerIndex == 0 ? player0TurnPoints : player1TurnPoints).setText("" + turnPoints);
     }
 
