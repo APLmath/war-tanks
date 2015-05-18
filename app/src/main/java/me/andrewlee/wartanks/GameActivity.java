@@ -71,6 +71,7 @@ public class GameActivity extends ActionBarActivity implements GameListener {
     private void restartGame() {
         game = new Game(this);
         lastPlayerTurn = game.getCurrentPlayer();
+        selectedTank = null;
         refresh();
     }
 
