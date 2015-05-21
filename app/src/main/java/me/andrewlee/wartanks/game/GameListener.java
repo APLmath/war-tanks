@@ -1,4 +1,4 @@
-package me.andrewlee.wartanks;
+package me.andrewlee.wartanks.game;
 
 /**
  * Created by andrewlee on 5/17/15.

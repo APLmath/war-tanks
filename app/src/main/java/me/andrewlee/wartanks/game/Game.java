@@ -1,4 +1,4 @@
-package me.andrewlee.wartanks;
+package me.andrewlee.wartanks.game;
 
 import java.util.HashSet;
 import java.util.Random;

@@ -10,12 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.util.Random;
+import me.andrewlee.wartanks.game.Game;
+import me.andrewlee.wartanks.game.GameListener;
+import me.andrewlee.wartanks.game.Tank;
 
 
 public class GameActivity extends ActionBarActivity implements GameListener {
